@@ -2,6 +2,8 @@
 
 Maxxfan infrared remote control protocol component for ESPHome.
 
+This component was originally developed for [Minuet](https://github.com/j9brown/minuet), a smart brushless DC motor controller for the [MAXXAIR Maxxfan](https://www.maxxair.com/products/fans/maxxfan-deluxe/).  You can also use it for other projects.
+
 ## Configuration
 
 ### Receiving Maxxfan remote control messages
