@@ -6,6 +6,16 @@ This component was originally developed for [Minuet](https://github.com/j9brown/
 
 ## Configuration
 
+### Including the component
+
+Add this stanza to your ESPHome configuration to pull the `maxxfan_protocol` component from github.
+
+```yaml
+external_components:
+  - source: github://j9brown/esphome-maxxfan-protocol@main
+    components: [ maxxfan_protocol ]
+```
+
 ### Receiving Maxxfan remote control messages
 
 Here's what you need to add to your ESPHome configuration to receive Maxxfan messages, assuming you have connected a 38 KHz infrared receiver to pin 2.
