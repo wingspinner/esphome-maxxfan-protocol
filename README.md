@@ -44,4 +44,4 @@ remote_receiver:
 
 ## Acknowledgements
 
-Thanks to [skypeachblue](https://github.com/skypeachblue/maxxfan-reversing) and [wingspinner](https://github.com/wingspinner) for helping to reverse engineer the Maxxfan IR remote control protocol.
+Thanks to [skypeachblue](https://github.com/skypeachblue/maxxfan-reversing) and [wingspinner](https://github.com/wingspinner) for all their work in successfully reverse engineering the Maxxfan IR remote control protocol which I leveraged and expanded apon to develop this code.
