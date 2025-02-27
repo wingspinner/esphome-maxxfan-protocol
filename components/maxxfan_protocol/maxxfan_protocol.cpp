@@ -7,49 +7,6 @@ namespace remote_base {
 
 static const char *const TAG = "remote.maxxfan";
 
-/* The Maxxfan IR remote protocol looks like RS232 with 1 start bit (zero), 8 data bits
- * encoded least-significant-bit first, no parity bits, and 2 stop bits (ones).
- * A mark signals a zero bit and a space signals a one bit.  Each bit period is 800 us.
- *
- * The packet consists of a fixed preamble followed by some data and a checksum.
- *
- * Here's an example of a packet and its decoding:
- *
- *   preamble:   0 01011010 11  ->  01011010  0x5A bit pattern
- *   preamble:   0 10100101 11  ->  10100101  0xA5 bit pattern (0x5A inverted)
- *   preamble:   0 00000001 11  ->  10000000  0x80 bit pattern
- *   preamble:   0 11111110 11  ->  01111111  0x7F bit pattern (0x80 inverted)
- *   preamble:   0 00000010 11  ->  01000000  0x40 bit pattern
- *   preamble:   0 11111101 11  ->  10111111  0xBF bit pattern (0x40 inverted)
- *   preamble:   0 00000100 11  ->  00100000  0x20 bit pattern
- *   preamble:   0 11111011 11  ->  11011111  0xDF bit pattern (0x20 inverted)
- *   preamble:   0 00001000 11  ->  00010000  0x10 bit pattern
- *   preamble:   0 00110011 11  ->  11001100  0xCC bit pattern
- *   state:      0 00100100 11  ->  00100100  state: fan off, fan exhaust, cover close, warn
- *   speed:      0 00100110 11  ->  01100100  speed percent: 100%
- *   auto temp:  0 00100010 11  ->  01000100  temperature in Fahrenheit: 68 F
- *   ???:        0 11111111 11  ->  11111111  unknown purpose, always 0xff
- *   ???:        0 11000100 11  ->  00100011  unknown purpose, always 0x23
- *   checksum:   0 00011011 11  ->  11011000  XOR of previous 5 bytes
- *   end:        11111111                     end of transmission
- *
- * The state field consists of a combination of flags as follows (numbered from LSB):
- *
- *   bit 0: fan state - off if 0, on if 1
- *   bit 1: cover override - set to 0 when the cover is controlled by the fan state
- *                           set to 1 in auto mode which opens and closes the cover automatically
- *                           set to 1 in ceiling fan mode when the user closes the cover while the fan is running
- *   bit 2: fan direction - intake if 0, exhaust if 1
- *   bit 3: cover state - close if 0, open if 1
- *   bit 4: mode - manual if 0, automatic if 1
- *   bit 5: warn - set to 1 when the user attempts to raise or lower the speed or temperature
- *                 beyond the allowed range
- *   bit 6-7: unknown purpose, always 0
- *
- * The speed percent is a multiple of 10 between 0 and 100 percent inclusively.
- *
- * The temperature ranges from 29 to 99 Fahrenheit inclusively.
- */
 class BitReader {
  public:
   BitReader(const RemoteReceiveData& data) : data_(data) {}
