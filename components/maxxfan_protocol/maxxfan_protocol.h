@@ -32,5 +32,30 @@ class MaxxfanProtocol : public RemoteProtocol<MaxxfanData> {
 
 DECLARE_REMOTE_PROTOCOL(Maxxfan)
 
+template<typename... Ts> class MaxxfanAction : public RemoteTransmitterActionBase<Ts...> {
+ public:
+  TEMPLATABLE_VALUE(bool, fan_on)
+  TEMPLATABLE_VALUE(uint8_t, fan_speed)
+  TEMPLATABLE_VALUE(bool, fan_exhaust)
+  TEMPLATABLE_VALUE(bool, cover_open)
+  TEMPLATABLE_VALUE(bool, auto_mode)
+  TEMPLATABLE_VALUE(uint8_t, auto_temperature)
+  TEMPLATABLE_VALUE(bool, special)
+  TEMPLATABLE_VALUE(bool, warn)
+
+  void encode(RemoteTransmitData *dst, Ts... x) override {
+    MaxxfanData data{};
+    data.fan_on = this->fan_on_.value(x...);
+    data.fan_speed = this->fan_speed_.value(x...);
+    data.fan_exhaust = this->fan_exhaust_.value(x...);
+    data.cover_open = this->cover_open_.value(x...);
+    data.auto_mode = this->auto_mode_.value(x...);
+    data.auto_temperature = this->auto_temperature_.value(x...);
+    data.special = this->special_.value(x...);
+    data.warn = this->warn_.value(x...);
+    MaxxfanProtocol().encode(dst, data);
+  }
+};
+
 }  // namespace remote_base
 }  // namespace esphome

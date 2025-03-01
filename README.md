@@ -15,21 +15,21 @@ Add this stanza to your ESPHome configuration to pull the `maxxfan_protocol` com
 external_components:
   - source: github://j9brown/esphome-maxxfan-protocol@main
     components: [ maxxfan_protocol ]
+
+# Enable the Maxxfan protocol.
+maxxfan_protocol:
 ```
 
 ### Receiving Maxxfan remote control messages
 
+The remote receiver's `on_maxxfan` event handler receives the [MaxxfanData](components/maxxfan_protocol/maxxfan_protocol.h) object that was parsed from the received message.
+
 Here's what you need to add to your ESPHome configuration to receive Maxxfan messages, assuming you have connected a 38 KHz infrared receiver to pin 2.
 
-The `on_maxxfan` handler receives the [MaxxfanData](components/maxxfan_protocol/maxxfan_protocol.h) object that was parsed from the received message.
-
 ```yaml
-# Enable the Maxxfan protocol.
-maxxfan_protocol:
-
 # Configure the IR receiver.
 remote_receiver:
-  - id: minuet_ir
+  - id: ir_receiver
     pin:
       number: 2  # Change this to the pin your IR receiver is attached to
       mode: input
@@ -46,7 +46,55 @@ remote_receiver:
 
 ### Transmitting Maxxfan remote control messages
 
-*Not implemented yet.  Please send the author a message or a pull request if you would like this feature.  It's pretty straightforward.*
+*Note: The transmitter implementation is currently a work in progress and needs further testing.*
+
+The `remote_transmitter.transmit_maxxfan` transmits a message to the fan and sets all parameters at once.  Any parameters you don't specify in the action will be set to their default values.  All parameters are templatable.
+
+| Parameter        | Acceptable values                                             | Default |
+| ---------------- | ------------------------------------------------------------- | ------- |
+| fan_on           | true: turn fan on, false: turn fan off                        | false   |
+| fan_speed        | speed percentage: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100     | 10      |
+| fan_exhaust      | true: exhaust direction, false: intake direction              | false   |
+| cover_open       | true: open cover, false: close cover                          | false   |
+| auto_mode        | true: automatic mode (thermostat control), false: manual mode | false   |
+| auto_temperature | thermostat setpoint in Fahrenheight: range 29 to 99           | 78      |
+| special          | (see protocol description below)                              | false   |
+| warn             | true: beep twice, false: don't warn                           | false   |
+
+Here's what you need to add to your ESPHome configuration to transmit Maxxfan messages, assuming you have connected an infrared LED to pin 10.
+
+```yaml
+# Configure the IR transmitter.
+remote_transmitter:
+  - id: ir_transmitter
+    pin:
+      number: 10  # Change this to the pin your IR transmitter is attached to
+      inverted: false
+    carrier_duty_percent: 50%
+
+# When a button is pressed, transmit a message to turn the fan on low speed in exhaust mode.
+# Note that each message sets all of the fan's parameters at once.  Any parameters you don't specify
+# in the action will be set to their default values.
+binary_sensor:
+  - platform: gpio
+    id: example_button
+    pin:
+      number: 9  # Change this to the pin of a button on your board
+      inverted: true
+    on_click:
+      then:
+        - logger.log: "Transmitting message to Maxxfan"
+        - remote_transmitter.transmit_maxxfan:
+            transmitter_id: ir_transmitter
+            fan_on: true
+            fan_exhaust: true
+            fan_speed: 10
+            cover_open: true
+            auto_mode: false
+            #auto_temperature:
+            #special:
+            #warn:
+```
 
 ### Example code
 
