@@ -48,7 +48,7 @@ remote_receiver:
 
 *Note: The transmitter implementation is currently a work in progress and needs further testing.*
 
-The `remote_transmitter.transmit_maxxfan` transmits a message to the fan and sets all parameters at once.  Any parameters you don't specify in the action will be set to their default values.  All parameters are templatable.
+The `remote_transmitter.transmit_maxxfan` action transmits a message to the fan and sets all parameters at once.  Any parameters you don't specify in the action will be set to their default values.  All parameters are templatable.
 
 | Parameter        | Value                                                                         | Default |
 | ---------------- | ----------------------------------------------------------------------------- | ------- |
