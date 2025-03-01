@@ -50,16 +50,16 @@ remote_receiver:
 
 The `remote_transmitter.transmit_maxxfan` transmits a message to the fan and sets all parameters at once.  Any parameters you don't specify in the action will be set to their default values.  All parameters are templatable.
 
-| Parameter        | Acceptable values                                             | Default |
-| ---------------- | ------------------------------------------------------------- | ------- |
-| fan_on           | true: turn fan on, false: turn fan off                        | false   |
-| fan_speed        | speed percentage: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100     | 10      |
-| fan_exhaust      | true: exhaust direction, false: intake direction              | false   |
-| cover_open       | true: open cover, false: close cover                          | false   |
-| auto_mode        | true: automatic mode (thermostat control), false: manual mode | false   |
-| auto_temperature | thermostat setpoint in Fahrenheight: range 29 to 99           | 78      |
-| special          | (see protocol description below)                              | false   |
-| warn             | true: beep twice, false: don't warn                           | false   |
+| Parameter        | Value                                                             | Default |
+| ---------------- | ----------------------------------------------------------------- | ------- |
+| fan_on           | `true`: turn fan on, `false`: turn fan off                        | `false` |
+| fan_speed        | speed percentage: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100         | `10`    |
+| fan_exhaust      | `true`: exhaust direction, `false`: intake direction              | `false` |
+| cover_open       | `true`: open cover, `false`: close cover                          | `false` |
+| auto_mode        | `true`: automatic mode (thermostat control), `false`: manual mode | `false` |
+| auto_temperature | thermostat setpoint in Fahrenheight: range 29 to 99               | `78`    |
+| special          | special modes: see [protocol details](#protocol-details)          | `false` |
+| warn             | `true`: beep twice, `false`: don't warn                           | `false` |
 
 Here's what you need to add to your ESPHome configuration to transmit Maxxfan messages, assuming you have connected an infrared LED to pin 10.
 
@@ -151,7 +151,7 @@ The *state* field holds a combination of flags as follows (numbered from LSB):
 | 6   | ???             | `0`   | Unknown purpose, always 0                                                                                        |
 | 7   | ???             | `0`   | Unknown purpose, always 0                                                                                        |
 
-Note: The meaning of the *special* flag is a bit unclear.  It can be used to detect ceiling fan mode (fan state = 1, special = 1, mode = 0).  It's purpose might be to override the normal behavior of the fan and the cover.  Further experimentation is needed.
+The meaning of the *special* flag is a bit unclear.  It can be used to detect ceiling fan mode (fan state = 1, special = 1, mode = 0).  Its purpose might be to override the normal behavior of the fan and the cover.  Further experimentation is needed.
 
 ## Acknowledgements
 
