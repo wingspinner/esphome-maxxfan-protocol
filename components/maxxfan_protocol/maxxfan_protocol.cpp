@@ -92,7 +92,7 @@ optional<MaxxfanData> MaxxfanProtocol::decode(RemoteReceiveData src) {
 
   MaxxfanData out{
     .fan_on = bool(state & 0x01),
-    .cover_override = bool(state & 0x02),
+    .special = bool(state & 0x02),
     .fan_exhaust = bool(state & 0x04),
     .cover_open = bool(state & 0x08),
     .auto_mode = bool(state & 0x10),
@@ -104,8 +104,8 @@ optional<MaxxfanData> MaxxfanProtocol::decode(RemoteReceiveData src) {
 }
 
 void MaxxfanProtocol::dump(const MaxxfanData &data) {
-  ESP_LOGD(TAG, "Received Maxxfan: fan_on=%d, fan_exhaust=%d, fan_speed=%d, cover_open=%d, cover_override=%d, auto_mode=%d, auto_temperature=%d, warn=%d",
-      data.fan_on, data.fan_exhaust, data.fan_speed, data.cover_open, data.cover_override, data.auto_mode, data.auto_temperature, data.warn);
+  ESP_LOGD(TAG, "Received Maxxfan: fan_on=%d, fan_exhaust=%d, fan_speed=%d, cover_open=%d, special=%d, auto_mode=%d, auto_temperature=%d, warn=%d",
+      data.fan_on, data.fan_exhaust, data.fan_speed, data.cover_open, data.special, data.auto_mode, data.auto_temperature, data.warn);
 }
 
 }  // namespace remote_base

@@ -90,7 +90,7 @@ The *state* field holds a combination of flags as follows (numbered from LSB):
 | --- | --------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
 | 0   | fan state       | `0`   | Fan off                                                                                                          |
 |     |                 | `1`   | Fan on                                                                                                           |
-| 1   | cover override? | `0`   | Cover is controlled by the fan state as usual, open when fan on, closed otherwise                                |
+| 1   | special         | `0`   | Fan operating normally, the cover opens when the fan turns on and closes when the fan turns off                  |
 |     |                 | `1`   | Either auto mode (thermostat controlled) or ceiling fan mode (fan on with cover closed) is active                |
 | 2   | fan direction   | `0`   | Intake                                                                                                           |
 |     |                 | `1`   | Exhaust                                                                                                          |
@@ -103,7 +103,7 @@ The *state* field holds a combination of flags as follows (numbered from LSB):
 | 6   | ???             | `0`   | Unknown purpose, always 0                                                                                        |
 | 7   | ???             | `0`   | Unknown purpose, always 0                                                                                        |
 
-Note: The *cover override* flag could perhaps be defined differently than presumed above.  Perhaps it just means "a special mode is active"?
+Note: The meaning of the *special* flag is a bit unclear.  It can be used to detect ceiling fan mode (fan state = 1, special = 1, mode = 0).  It's purpose might be to override the normal behavior of the fan and the cover.  Further experimentation is needed.
 
 ## Acknowledgements
 
