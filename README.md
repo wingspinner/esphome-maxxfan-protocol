@@ -11,6 +11,7 @@ This component was originally developed for [Minuet](https://github.com/j9brown/
 Add this stanza to your ESPHome configuration to pull the `maxxfan_protocol` component from github.
 
 ```yaml
+# Import the maxxfan protocol component from Github.
 external_components:
   - source: github://j9brown/esphome-maxxfan-protocol@main
     components: [ maxxfan_protocol ]
@@ -23,10 +24,14 @@ Here's what you need to add to your ESPHome configuration to receive Maxxfan mes
 The `on_maxxfan` handler receives the [MaxxfanData](components/maxxfan_protocol/maxxfan_protocol.h) object that was parsed from the received message.
 
 ```yaml
+# Enable the Maxxfan protocol.
+maxxfan_protocol:
+
+# Configure the IR receiver.
 remote_receiver:
   - id: minuet_ir
     pin:
-      number: 2
+      number: 2  # Change this to the pin your IR receiver is attached to
       mode: input
       inverted: true
     rmt_channel: 2
@@ -36,11 +41,16 @@ remote_receiver:
       then:
         lambda: |-
           // The variable 'x' holds a MaxxfanData object parsed from the received message
+          ESP_LOGD("maxxfan-example", "Fan state: %s", x.fan_on ? "on" : "off");
 ```
 
 ### Transmitting Maxxfan remote control messages
 
 *Not implemented yet.  Please send the author a message or a pull request if you would like this feature.  It's pretty straightforward.*
+
+### Example code
+
+See also [maxxfan-example.yaml](maxxfan-example.yaml) as a starting point for your configuration.
 
 ## Protocol details
 
