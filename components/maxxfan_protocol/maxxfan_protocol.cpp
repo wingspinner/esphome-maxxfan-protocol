@@ -91,12 +91,12 @@ optional<MaxxfanData> MaxxfanProtocol::decode(RemoteReceiveData src) {
   }
 
   MaxxfanData out{
-    .fan_on = state & 0x01,
-    .cover_override = state & 0x02,
-    .fan_exhaust = state & 0x04,
-    .cover_open = state & 0x08,
-    .auto_mode = state & 0x10,
-    .warn = state & 0x20,
+    .fan_on = bool(state & 0x01),
+    .cover_override = bool(state & 0x02),
+    .fan_exhaust = bool(state & 0x04),
+    .cover_open = bool(state & 0x08),
+    .auto_mode = bool(state & 0x10),
+    .warn = bool(state & 0x20),
     .fan_speed = fan_speed,
     .auto_temperature = auto_temperature
   };
