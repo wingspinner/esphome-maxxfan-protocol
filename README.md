@@ -50,16 +50,16 @@ remote_receiver:
 
 The `remote_transmitter.transmit_maxxfan` transmits a message to the fan and sets all parameters at once.  Any parameters you don't specify in the action will be set to their default values.  All parameters are templatable.
 
-| Parameter        | Value                                                             | Default |
-| ---------------- | ----------------------------------------------------------------- | ------- |
-| fan_on           | `true`: turn fan on, `false`: turn fan off                        | `false` |
-| fan_speed        | speed percentage: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100         | `10`    |
-| fan_exhaust      | `true`: exhaust direction, `false`: intake direction              | `false` |
-| cover_open       | `true`: open cover, `false`: close cover                          | `false` |
-| auto_mode        | `true`: automatic mode (thermostat control), `false`: manual mode | `false` |
-| auto_temperature | thermostat setpoint in Fahrenheight: range 29 to 99               | `78`    |
-| special          | special modes: see [protocol details](#protocol-details)          | `false` |
-| warn             | `true`: beep twice, `false`: don't warn                           | `false` |
+| Parameter        | Value                                                                         | Default |
+| ---------------- | ----------------------------------------------------------------------------- | ------- |
+| fan_on           | Fan state: `true` turns fan on, `false` turns fan off                         | `false` |
+| fan_speed        | Fan speed percent: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100                    | `10`    |
+| fan_exhaust      | Fan direction: `true` for exhaust, `false` for intake                         | `false` |
+| cover_open       | Cover state: `true` for open, `false` for close                               | `false` |
+| auto_mode        | Mode: `true` for automatic mode (thermostat control), `false` for manual mode | `false` |
+| auto_temperature | Thermostat setpoint in Fahrenheight: range 29 to 99                           | `78`    |
+| special          | Special modes: see [protocol details](#protocol-details)                      | `false` |
+| warn             | Emit warning tone: `true` to beep twice, `false` to not beep                  | `false` |
 
 Here's what you need to add to your ESPHome configuration to transmit Maxxfan messages, assuming you have connected an infrared LED to pin 10.
 
@@ -120,13 +120,13 @@ Here's an example of a packet and its decoding:
 | preamble   | `0 11111011 11` | `11011111`   | 0xDF bit pattern (0x20 inverted)                    |
 | preamble   | `0 00001000 11` | `00010000`   | 0x10 bit pattern                                    |
 | preamble   | `0 00110011 11` | `11001100`   | 0xCC bit pattern                                    |
-| state      | `0 00100100 11` | `00100100`   | state: fan off, fan exhaust, cover close, warn      |
-| speed      | `0 00100110 11` | `01100100`   | speed percent: 100%                                 |
-| auto temp  | `0 00100010 11` | `01000100`   | thermostat temperature setpoint in Fahrenheit: 68 F |
-| ???        | `0 11111111 11` | `11111111`   | unknown purpose, always 0xff                        |
-| ???        | `0 11000100 11` | `00100011`   | unknown purpose, always 0x23                        |
+| state      | `0 00100100 11` | `00100100`   | State: fan off, fan exhaust, cover close, warn      |
+| speed      | `0 00100110 11` | `01100100`   | Speed percent: 100%                                 |
+| auto temp  | `0 00100010 11` | `01000100`   | Thermostat temperature setpoint in Fahrenheit: 68 F |
+| ???        | `0 11111111 11` | `11111111`   | Unknown purpose, always 0xff                        |
+| ???        | `0 11000100 11` | `00100011`   | Unknown purpose, always 0x23                        |
 | checksum   | `0 00011011 11` | `11011000`   | XOR of previous 5 bytes                             |
-| end        | `11111111`      |              | end of transmission                                 |
+| end        | `11111111`      |              | End of transmission                                 |
 
 The *speed* field sets fan speed percentage as a multiple of 10 between 0 and 100 percent inclusively.
 
